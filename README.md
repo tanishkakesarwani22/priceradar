@@ -41,8 +41,8 @@ Python, MySQL (XAMPP), BeautifulSoup, pandas, Streamlit, smtplib, schedule
 - Secrets are stored in `.env`, which is excluded from Git.
 
 ## Screenshots
-[Dashboard screenshot here]
-[Email alert screenshot here]
+![Dashboard](screenshots/dashboard.png)
+![Email alert](screenshots/email.jpeg)
 
 ## What I Learned
 Web scraping, MySQL schema design and indexing, scheduling, SMTP email, duplicate-alert prevention, and building dashboards with Streamlit.
