@@ -66,4 +66,7 @@ c1.metric("Current price", f"{float(row['current_price']):.2f}")
 c2.metric("Lowest price", f"{float(row['lowest_price']):.2f}")
 c3.metric("Average price", f"{history['price'].mean():.2f}")
 
-st.line_chart(history.set_index("checked_at")["price"])
+chart_df = history.set_index("checked_at")[["price"]].copy()
+if pd.notna(row["target_price"]):
+    chart_df["target"] = float(row["target_price"])
+st.line_chart(chart_df)
