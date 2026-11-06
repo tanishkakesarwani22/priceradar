@@ -24,7 +24,7 @@ def get_connection():
 def load_products():
     conn = get_connection()
     df = pd.read_sql(
-        "SELECT id, name, current_price, lowest_price, target_price, last_checked "
+        "SELECT id, name, current_price, lowest_price, target_price, last_checked, is_active "
         "FROM products",
         conn,
     )
@@ -96,3 +96,27 @@ chart_df = history.set_index("checked_at")[["price"]].copy()
 if pd.notna(row["target_price"]):
     chart_df["target"] = float(row["target_price"])
 st.line_chart(chart_df)
+
+st.subheader("Tracking control")
+
+
+def set_active(pid, value):
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE products SET is_active = %s WHERE id = %s", (value, pid))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+
+is_active = int(row["is_active"])
+st.write(f"**{choice}** ka status: " + ("Chalu ✅" if is_active == 1 else "Paused ⏸️"))
+
+if is_active == 1:
+    if st.button("⏸️ Pause tracking"):
+        set_active(product_id, 0)
+        st.rerun()
+else:
+    if st.button("▶️ Resume tracking"):
+        set_active(product_id, 1)
+        st.rerun()

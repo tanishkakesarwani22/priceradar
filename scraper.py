@@ -69,7 +69,7 @@ import random
 def get_urls():
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute("SELECT url FROM products")
+    cur.execute("SELECT url FROM products WHERE is_active = 1")
     urls = [row[0] for row in cur.fetchall()]
     cur.close()
     conn.close()

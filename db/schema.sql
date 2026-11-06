@@ -9,7 +9,8 @@ CREATE TABLE products (
     lowest_price DECIMAL(10,2),
     target_price DECIMAL(10,2),
     last_checked DATETIME,
-    alert_sent TINYINT DEFAULT 0
+    alert_sent TINYINT DEFAULT 0,s
+    is_active TINYINT DEFAULT 1
 );
 
 CREATE TABLE price_history (
