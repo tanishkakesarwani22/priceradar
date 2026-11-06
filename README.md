@@ -10,7 +10,8 @@ PriceRadar tracks product prices automatically, stores the price history in MySQ
 - Sends an email alert when price <= target price
 - Prevents duplicate alerts using an `alert_sent` flag
 - Streamlit dashboard with a product table, metrics, and a price history chart
-
+- Add new products from the dashboard with a target price (no code editing needed)
+- Chart shows the target price as a horizontal line
 ## Tech Stack
 Python, MySQL (XAMPP), BeautifulSoup, pandas, Streamlit, smtplib, schedule
 
