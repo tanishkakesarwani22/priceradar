@@ -3,6 +3,7 @@ import pandas as pd
 import mysql.connector
 import streamlit as st
 from dotenv import load_dotenv
+from scraper import fetch_product, save_price
 
 load_dotenv()
 
@@ -42,6 +43,31 @@ def load_history(product_id):
     conn.close()
     return df
 
+st.subheader("Naya product add karo")
+with st.form("add_product", clear_on_submit=True):
+    new_url = st.text_input("Product ka link (books.toscrape.com)")
+    new_target = st.number_input("Target price", min_value=0.0, value=45.0, step=1.0)
+    submitted = st.form_submit_button("Add")
+
+if submitted:
+    if not new_url.startswith("http"):
+        st.error("Sahi link daalo (http se shuru hona chahiye).")
+    else:
+        try:
+            name, price = fetch_product(new_url)
+            save_price(new_url, name, price)
+            conn = get_connection()
+            cur = conn.cursor()
+            cur.execute(
+                "UPDATE products SET target_price = %s WHERE url = %s",
+                (new_target, new_url),
+            )
+            conn.commit()
+            cur.close()
+            conn.close()
+            st.success(f"Add ho gaya: {name} ({price})")
+        except Exception as e:
+            st.error(f"Add nahi ho paya: {e}")
 
 products = load_products()
 

@@ -66,11 +66,14 @@ def save_price(url, name, price):
 import time
 import random
 
-URLS = [
-    "https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html",
-    "https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html",
-    "https://books.toscrape.com/catalogue/soumission_998/index.html",
-]
+def get_urls():
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT url FROM products")
+    urls = [row[0] for row in cur.fetchall()]
+    cur.close()
+    conn.close()
+    return urls
 
 def check_alert(url):
     conn = get_connection()
@@ -106,7 +109,7 @@ def check_alert(url):
     conn.close()
 
 def check_all():
-    for url in URLS:
+    for url in get_urls():
         try:
             name, price = fetch_product(url)
             save_price(url, name, price)
