@@ -97,6 +97,30 @@ if pd.notna(row["target_price"]):
     chart_df["target"] = float(row["target_price"])
 st.line_chart(chart_df)
 
+def check_fake_discount(prices, current):
+    # prices: purani se nayi tak ki list
+    if len(prices) < 3:
+        return None
+    first = prices[0]
+    peak = max(prices)
+    if peak >= first * 1.10 and current < peak and current >= first:
+        return first, peak
+    return None
+
+
+result = check_fake_discount(
+    history["price"].tolist(), float(row["current_price"])
+)
+if result:
+    first, peak = result
+    st.warning(
+        f"⚠️ Possible fake discount: price pehle {first:.2f} thi, "
+        f"badhkar {peak:.2f} hui, ab {float(row['current_price']):.2f} hai. "
+        f"Ye shuru wali price se abhi bhi zyada hai."
+    )
+else:
+    st.success("✅ Is product par fake discount ka koi sanket nahi mila.")
+
 st.subheader("Tracking control")
 
 
