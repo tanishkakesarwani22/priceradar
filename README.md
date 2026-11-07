@@ -13,6 +13,9 @@ PriceRadar tracks product prices automatically, stores the price history in MySQ
 - Add new products from the dashboard with a target price (no code editing needed)
 - Chart shows the target price as a horizontal line
 - Pause or resume tracking for any product from the dashboard (history is kept)
+- Multi-site support: each website's selectors are kept in a `SITE_SELECTORS` config, so a new site needs one new line, not new code
+
+
 ## Tech Stack
 Python, MySQL (XAMPP), BeautifulSoup, pandas, Streamlit, smtplib, schedule
 
@@ -41,6 +44,7 @@ Python, MySQL (XAMPP), BeautifulSoup, pandas, Streamlit, smtplib, schedule
 - The practice site `books.toscrape.com` is used because it is built for scraping practice.
 - Price history shown in the dashboard is partly **simulated demo data**, since the practice site's prices do not change.
 - Secrets are stored in `.env`, which is excluded from Git.
+- Supported sites: `books.toscrape.com` and `webscraper.io/test-sites` (both built for scraping practice)
 
 ## Screenshots
 ![Dashboard](screenshots/dashboard.png)

@@ -4,6 +4,8 @@ import mysql.connector
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 from alerts import send_email
+from urllib.parse import urlparse
+
 load_dotenv()
 HEADERS = {"User-Agent": "Mozilla/5.0 (PriceRadar student project)"}
 
@@ -17,13 +19,28 @@ def get_connection():
     )
 
 
+SITE_SELECTORS = {
+    "books.toscrape.com": {"name": "h1", "price": "p.price_color"},
+    "webscraper.io": {"name": "h4.title", "price": 'span[itemprop="price"]'},
+}
+
 def fetch_product(url):
+    domain = urlparse(url).netloc
+    sel = SITE_SELECTORS.get(domain)
+    if sel is None:
+        raise ValueError(f"{domain} ke selectors set nahi hain")
+
     resp = requests.get(url, headers=HEADERS, timeout=10)
     resp.raise_for_status()
     soup = BeautifulSoup(resp.text, "html.parser")
 
-    name = soup.select_one("h1").get_text(strip=True)
-    price_text = soup.select_one("p.price_color").get_text()
+    name_tag = soup.select_one(sel["name"])
+    price_tag = soup.select_one(sel["price"])
+    if name_tag is None or price_tag is None:
+        raise ValueError("Naam ya price page par nahi mila (selector galat ho sakta hai)")
+
+    name = name_tag.get_text(strip=True)
+    price_text = price_tag.get_text()
     price = float("".join(c for c in price_text if c.isdigit() or c == "."))
     return name, price
 

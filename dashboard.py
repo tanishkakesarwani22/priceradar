@@ -45,7 +45,7 @@ def load_history(product_id):
 
 st.subheader("Naya product add karo")
 with st.form("add_product", clear_on_submit=True):
-    new_url = st.text_input("Product ka link (books.toscrape.com)")
+    new_url = st.text_input("Product ka link (books.toscrape.com ya webscraper.io)")
     new_target = st.number_input("Target price", min_value=0.0, value=45.0, step=1.0)
     submitted = st.form_submit_button("Add")
 
